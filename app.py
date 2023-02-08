@@ -52,7 +52,7 @@ def check_item(item):
     indus_dir = get_path(item['uuid'], item['version'], 'indus')
 
     if os.path.exists(main_dir) and os.path.exists(indus_dir):
-        print('Item %s version %i exists in both filestores' % item['links']['view'])
+        print('Item %s exists in both filestores' % item['links']['view'])
         diff = compareTwoFileTrees(main_dir, indus_dir)
         if len(diff) > 0:
             print('Found storage differences for item %s' % item['links']['view'])
