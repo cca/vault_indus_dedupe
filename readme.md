@@ -28,6 +28,12 @@ To collect a JSON array of INDUS items, we can iterate over `eq search` commands
 cat items.txt | gsed -e 's/^}$/},/' -e '1c[{' -e '$c}]' > items.json
 ```
 
+That will collect items that _still exist_ in VAULT, but items have were purged previously are not accessible via search. To find previously purged items from our retention procedures, we can use the `jq` command below (the output file will need to be wrapped in array brackets afterwards):
+
+```sh
+jq '.[] | select(.collection.uuid == "5b07c041-2353-4712-92d0-a71eed9201da")' purged.json | sed 's/^}$/},/' > INDUS.json
+```
+
 Once we have the items JSON, just sync this data to the file server and run the script with enough permissions to operate on the files in the filestore.
 
 ```sh
@@ -41,8 +47,10 @@ Once we have the items JSON, just sync this data to the file server and run the 
 
 Included is a test.json file of example items that demonstrate different scenarios, meant to be processed with the `--dry-run` flag. It should show that one item exists only in the INDUS filestore, one in the main, and one in both with no differences in the file list.
 
-@TODO generate an items JSON file for INDUS items deleted as part of our retention procedures. These items aren't captured in an `eq search` because their metadata has been purged from the system but a copy of their files should remain in the main storage area.
-
 ## Results
 
-Of 743 items, all but one had a duplicate attachments directory under the main storage area. Of those 742 items, only 3 had differences in their file lists: 1 item (a 2016 test of character-encoding issues of uploaded filenames which has since been fixed) had 2 of the same file with different names and 2 items had an additional thumbnail image in the INDUS filestore which the main directory did not have, probably because it was generated after the storage change. I manually removed the attachments from these 3 items and then reran the script to delete the 740 duplicate attachments directories. There was no noticeable impact on disk usage per `df -h` before and after the script.
+Live items: of 743 items, all but one had a duplicate attachments directory under the main storage area. Of those 742 items, only 3 had differences in their file lists: 1 item (a 2016 test of character-encoding issues of uploaded filenames which has since been fixed) had 2 of the same file with different names and 2 items had an additional thumbnail image in the INDUS filestore which the main directory did not have, probably because it was generated after the storage change. I manually removed the attachments from these 3 items and then reran the script to delete the 740 duplicate attachments directories. There was no noticeable impact on disk usage per `df -h` before and after the script.
+
+Purged items: of 818 items, 595 only existed in the main filestore, 202 items existed in both filestores, and 21 only existed in the INDUS filestore. 5 items had storage differences; all were related to derivative/preview files and not indicative of any real problem.
+
+It is odd that so many items have entries in the INDUS filestore, and that some _only_ have files in the INDUS location. I reran the script to remove 595 + 202 = 797 directories from main storage, but that still leaves 202 + 21 = 243 directories under the INDUS filestore that should not be there.
