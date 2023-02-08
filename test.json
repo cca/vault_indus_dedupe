@@ -1,0 +1,26 @@
+[
+    {
+        "note": "new test item only in INDUS FS",
+        "uuid": "82d0ae15-258f-4ff8-9aa7-8e82269d50da",
+        "version": 1,
+        "links": {
+            "view": "https://vault.cca.edu/items/82d0ae15-258f-4ff8-9aa7-8e82269d50da/1/"
+        }
+    },
+    {
+        "note": "purged item only in main FS",
+        "uuid": "a7c1137a-7c34-412d-81ea-bcac96986c38",
+        "version": 1,
+        "links": {
+            "view": "https://vault.cca.edu/items/a7c1137a-7c34-412d-81ea-bcac96986c38/1/"
+        }
+    },
+    {
+        "note": "'Robot Arms' item in both FSs",
+        "uuid": "9cd147bc-ad54-4873-938f-4dd20db648cc",
+        "version": 1,
+        "links": {
+            "view": "https://vault.cca.edu/items/9cd147bc-ad54-4873-938f-4dd20db648cc/1/"
+        }
+    }
+]
